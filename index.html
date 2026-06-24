@@ -5,7 +5,7 @@
     <!-- Meta Tags for Responsive Design and SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bakery Bee | Allergy-Friendly Baking</title>
+    <title>Bakery Bee | Custom Allergy-Friendly Baking</title>
     <meta name="description"
         content="Bakery Bee offers custom-made bread, cakes, and treats tailored for medical allergies, while supporting the bee population.">
 
@@ -49,6 +49,7 @@
             background-color: #fafafa;
             color: #0B0A0A;
             overflow-x: hidden;
+            transition: font-size 0.2s ease, filter 0.3s ease;
         }
 
         /* Honey Drip SVG positioning */
@@ -251,7 +252,7 @@
                 <div class="relative reveal">
                     <!-- Decorative background shape -->
                     <div class="absolute -inset-4 bg-primary rounded-3xl transform rotate-3 opacity-30"></div>
-                    <img src="https://plus.unsplash.com/premium_photo-1661288486308-6d434fa1a232?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    <img src="https://plus.unsplash.com/premium_photo-1661288486308-6d434fa1a232?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Baker kneading dough"
                         class="relative rounded-2xl shadow-2xl w-full h-auto object-cover z-10" />
                 </div>
@@ -401,7 +402,7 @@
                 <div class="relative group rounded-xl overflow-hidden reveal cursor-pointer gallery-item"
                     style="transition-delay: 100ms;" data-title="Our Specialists" data-subtitle="Team"
                     data-desc="Our team consists of certified artisan bakers and dietary specialists. Every recipe is meticulously crafted, tested, and refined to ensure absolute safety without ever compromising on taste, texture, or presentation.">
-                    <img src="https://images.unsplash.com/photo-1620619767323-b95a89183081?q=80&w=1000&auto=format&fit=crop"
+                    <img src="https://media.istockphoto.com/id/1076244572/photo/cooking-master-class-in-bakery-chef-with-his-assistant-showing-ready-samples-of-baking-test.webp?a=1&b=1&s=612x612&w=0&k=20&c=BYlOuVgDFIDN9YdEoGYZcVUl1enN_y92QN3nFpnDHT8="
                         alt="Our Staff"
                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div
@@ -764,6 +765,67 @@
     </div>
 
     <!-- ==========================================
+         ACCESSIBILITY ASSISTIVE WIDGET (NEW)
+         ========================================== -->
+    <div class="fixed bottom-6 left-6 z-[90]">
+        <!-- Accessible Floating Trigger Button -->
+        <button id="accessibility-toggle-btn"
+            class="w-14 h-14 bg-dark text-primary rounded-full shadow-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all duration-300 border-2 border-primary"
+            title="Accessibility Assistive Menu">
+            <i class="fa-solid fa-universal-access text-2xl animate-pulse"></i>
+        </button>
+
+        <!-- Accessibility Menu Dropup Panel -->
+        <div id="accessibility-panel"
+            class="hidden absolute bottom-16 left-0 bg-white border border-gray-200 rounded-2xl shadow-2xl w-72 p-6 transform scale-95 opacity-0 transition-all duration-300 origin-bottom-left">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
+                <h4 class="font-bold text-dark flex items-center gap-2">
+                    <i class="fa-solid fa-universal-access text-secondary"></i>
+                    Accessibility Options
+                </h4>
+                <button id="close-accessibility" class="text-gray-400 hover:text-dark">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Text Scale Feature -->
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-semibold text-gray-700">Adjust Text Size (Max 5 clicks)</span>
+                        <span id="text-size-clicks"
+                            class="text-xs bg-accent text-dark px-2 py-0.5 rounded-full font-bold">0 / 5</span>
+                    </div>
+                    <button id="btn-increase-text"
+                        class="w-full py-2 bg-gray-100 hover:bg-primary hover:text-dark rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-font"></i> Increase Font Size
+                    </button>
+                </div>
+
+                <!-- High Contrast Feature -->
+                <div>
+                    <span class="text-xs font-semibold text-gray-700 block mb-1">Color / Vision Adjuster</span>
+                    <button id="btn-toggle-contrast"
+                        class="w-full py-2 bg-gray-100 hover:bg-primary hover:text-dark rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-half-stroke"></i> Toggle High Contrast
+                    </button>
+                </div>
+
+                <!-- Screen Reader Assistant (Perfect for Blind/Severe Myopia users) -->
+                <div>
+                    <span class="text-xs font-semibold text-gray-700 block mb-1">Screen Reader Assistant (TTS)</span>
+                    <button id="btn-toggle-tts"
+                        class="w-full py-2 bg-gray-100 hover:bg-primary hover:text-dark rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-volume-high"></i> <span id="tts-status">Enable Speech Assist</span>
+                    </button>
+                    <p class="text-[9px] text-gray-500 mt-1 leading-normal">Activate, then hover over elements or images
+                        to hear their textual details read aloud.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
          JAVASCRIPT LOGIC
          ========================================== -->
     <script>
@@ -973,6 +1035,114 @@
                     btn.classList.add('bg-primary');
                     btn.classList.remove('hover:bg-primary');
                 });
+            });
+
+            // 7. Accessibility Assistive Logic
+            const accToggleBtn = document.getElementById('accessibility-toggle-btn');
+            const accPanel = document.getElementById('accessibility-panel');
+            const accCloseBtn = document.getElementById('close-accessibility');
+
+            // Open/Close Accessibility menu panel
+            accToggleBtn.addEventListener('click', () => {
+                const isHidden = accPanel.classList.contains('hidden');
+                if (isHidden) {
+                    accPanel.classList.remove('hidden');
+                    void accPanel.offsetWidth;
+                    accPanel.classList.remove('scale-95', 'opacity-0');
+                } else {
+                    accPanel.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        accPanel.classList.add('hidden');
+                    }, 300);
+                }
+            });
+
+            accCloseBtn.addEventListener('click', () => {
+                accPanel.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    accPanel.classList.add('hidden');
+                }, 300);
+            });
+
+            // A. Font Sizer (Strict 5-click maximum boundary condition)
+            let fontSizeClicks = 0;
+            const btnIncreaseText = document.getElementById('btn-increase-text');
+            const textSizeCounter = document.getElementById('text-size-clicks');
+
+            btnIncreaseText.addEventListener('click', () => {
+                fontSizeClicks++;
+                if (fontSizeClicks > 5) {
+                    fontSizeClicks = 0;
+                }
+
+                // Scale calculations (+8% scale per step, up to +40%)
+                const currentScale = 100 + (fontSizeClicks * 8);
+                document.documentElement.style.fontSize = `${currentScale}%`;
+
+                // Display click logs dynamically
+                if (fontSizeClicks === 0) {
+                    textSizeCounter.textContent = "Normal";
+                } else {
+                    textSizeCounter.textContent = `${fontSizeClicks} / 5`;
+                }
+            });
+
+            // B. Color / Vision High Contrast Adjuster
+            const btnToggleContrast = document.getElementById('btn-toggle-contrast');
+            let isHighContrastActive = false;
+
+            btnToggleContrast.addEventListener('click', () => {
+                isHighContrastActive = !isHighContrastActive;
+                if (isHighContrastActive) {
+                    document.documentElement.style.filter = "contrast(1.4) saturate(1.2)";
+                    btnToggleContrast.classList.add('bg-primary', 'text-dark');
+                } else {
+                    document.documentElement.style.filter = "";
+                    btnToggleContrast.classList.remove('bg-primary', 'text-dark');
+                }
+            });
+
+            // C. Screen Reader Assistant (Text-to-Speech Web API integration)
+            const btnToggleTts = document.getElementById('btn-toggle-tts');
+            const ttsStatus = document.getElementById('tts-status');
+            let isTtsActive = false;
+
+            btnToggleTts.addEventListener('click', () => {
+                isTtsActive = !isTtsActive;
+                if (isTtsActive) {
+                    btnToggleTts.classList.add('bg-primary', 'text-dark');
+                    ttsStatus.textContent = "TTS: Active";
+                    speakAccessibilityText("Assistive screen reader enabled. Hover over any text on the screen to listen.");
+                } else {
+                    btnToggleTts.classList.remove('bg-primary', 'text-dark');
+                    ttsStatus.textContent = "Enable Speech Assist";
+                    if ('speechSynthesis' in window) {
+                        window.speechSynthesis.cancel();
+                    }
+                }
+            });
+
+            function speakAccessibilityText(text) {
+                if (!('speechSynthesis' in window)) return;
+                window.speechSynthesis.cancel(); // Cleans the buffer instantly before running new queue
+                const voiceSpeech = new SpeechSynthesisUtterance(text);
+                voiceSpeech.rate = 1.0;
+                window.speechSynthesis.speak(voiceSpeech);
+            }
+
+            // Attach mouseover hooks to parse readable HTML structures
+            document.body.addEventListener('mouseover', (e) => {
+                if (!isTtsActive) return;
+
+                const hoveredElement = e.target;
+                const matchesReadableTag = ['H1', 'H2', 'H3', 'H4', 'P', 'SPAN', 'A', 'BUTTON', 'LI'].includes(hoveredElement.tagName);
+
+                if (matchesReadableTag) {
+                    const textualInformation = hoveredElement.innerText || hoveredElement.getAttribute('aria-label') || hoveredElement.getAttribute('alt');
+                    if (textualInformation && textualInformation.trim().length > 0) {
+                        speakAccessibilityText(textualInformation.slice(0, 150));
+                    }
+                }
             });
         });
     </script>
