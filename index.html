@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <!-- Meta Tags for Responsive Design and SEO -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakery Bee | Allergy-Friendly Baking</title>
+    <meta name="description"
+        content="Bakery Bee offers custom-made bread, cakes, and treats tailored for medical allergies, while supporting the bee population.">
+
+    <!-- Google Fonts: Poppins for a modern, clean, and accessible look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS (via CDN for single-file deployment) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration: Applying your exact WDD color palette -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F6E000',    // Main Yellow
+                        secondary: '#EDA73E',  // Orange/Amber
+                        accent: '#ECEE00',     // Light Yellow
+                        dark: '#000000',       // Black
+                        deepDark: '#0B0A0A'    // Deep Black
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Animations and Specific Stylings -->
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fafafa;
+            color: #0B0A0A;
+            overflow-x: hidden;
+        }
+
+        /* Honey Drip SVG positioning */
+        .honey-drip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            z-index: 10;
+        }
+
+        .honey-drip svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 150px;
+        }
+
+        @media (min-width: 768px) {
+            .honey-drip svg {
+                height: 250px;
+            }
+        }
+
+        /* Scroll Animations (triggered by Intersection Observer in JS) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Button Hover Effect */
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+
+        .btn-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Card Hover Effect */
+        .menu-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-secondary selection:text-white">
+
+    <!-- ==========================================
+         NAVIGATION BAR
+         ========================================== -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar" style="background-color: #F6E000;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20 relative">
+                <!-- Logo Area -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i class="fa-solid fa-wheat-awn text-3xl text-dark mr-2"></i>
+                    <span class="font-bold text-2xl tracking-tight text-dark">Bakery Bee</span>
+                </div>
+
+                <!-- Desktop Menu (Centered via absolute positioning) -->
+                <div class="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2 w-max">
+                    <a href="#home"
+                        class="nav-link text-dark hover:text-secondary font-medium transition-colors">Home</a>
+                    <a href="#about"
+                        class="nav-link text-dark hover:text-secondary font-medium transition-colors">About</a>
+                    <a href="#menu"
+                        class="nav-link text-dark hover:text-secondary font-medium transition-colors">Menu</a>
+                    <a href="#gallery"
+                        class="nav-link text-dark hover:text-secondary font-medium transition-colors">Gallery</a>
+                    <a href="#review"
+                        class="nav-link text-dark hover:text-secondary font-medium transition-colors">Review</a>
+                    <a href="#contact"
+                        class="nav-link text-dark hover:text-secondary font-medium transition-colors">Contact</a>
+                </div>
+
+                <!-- Desktop Donation Button (Pushed to Right) -->
+                <div class="hidden md:flex items-center">
+                    <a href="#donation"
+                        class="px-5 py-2 bg-dark text-primary rounded-full font-semibold hover:bg-secondary hover:text-white transition-colors shadow-sm">Donation</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-dark hover:text-secondary focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-primary pb-4 shadow-lg absolute w-full">
+            <div class="flex flex-col space-y-3 px-6">
+                <a href="#home" class="mobile-nav-link text-dark font-medium text-lg">Home</a>
+                <a href="#about" class="mobile-nav-link text-dark font-medium text-lg">About</a>
+                <a href="#menu" class="mobile-nav-link text-dark font-medium text-lg">Menu</a>
+                <a href="#gallery" class="mobile-nav-link text-dark font-medium text-lg">Gallery</a>
+                <a href="#review" class="mobile-nav-link text-dark font-medium text-lg">Review</a>
+                <a href="#contact" class="mobile-nav-link text-dark font-medium text-lg">Contact</a>
+                <a href="#donation"
+                    class="mobile-nav-link inline-block text-center mt-2 px-5 py-2 bg-dark text-primary rounded-full font-semibold">Donation</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==========================================
+         HERO SECTION (HOME)
+         ========================================== -->
+    <header id="home" class="relative h-screen flex items-center justify-center pt-20">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop"
+                alt="Warm rustic bakery background" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        </div>
+
+        <!-- The Honey Drip Effect as requested in the wireframe -->
+        <div class="honey-drip" style="top: 80px;"> <!-- 80px offset for navbar -->
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                preserveAspectRatio="none">
+                <path
+                    d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+                    opacity=".25" fill="#F6E000"></path>
+                <path
+                    d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-50.09V0Z"
+                    opacity=".5" fill="#F6E000"></path>
+                <path
+                    d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
+                    fill="#F6E000"></path>
+            </svg>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto reveal">
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-lg tracking-wide">Bee Bakery</h1>
+            <p class="text-xl md:text-2xl text-accent font-medium mb-10 drop-shadow-md">Exquisite Custom Baking, Rooted
+                in Nature.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="#menu"
+                    class="btn-hover bg-primary text-dark font-bold py-4 px-8 rounded-full text-lg shadow-lg">View Our
+                    Menu</a>
+                <a href="#about"
+                    class="btn-hover bg-white text-dark font-bold py-4 px-8 rounded-full text-lg shadow-lg">Our
+                    Philosophy</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         ABOUT SECTION
+         ========================================== -->
+    <section id="about" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <div
+                        class="inline-block px-4 py-2 bg-accent rounded-full text-dark font-semibold text-sm mb-4 tracking-wider uppercase">
+                        Our Story</div>
+                    <h2 class="text-4xl font-bold text-deepDark mb-6">Why We Created Bakery Bee</h2>
+                    <p class="text-gray-700 text-lg mb-6 leading-relaxed">
+                        Bakery Bee was founded with a specialized mission: to provide exquisite, custom-made baked goods
+                        tailored for individuals with specific medical allergies and dietary requirements. We believe
+                        everyone deserves to enjoy a slice of happiness without compromise.
+                    </p>
+                    <p class="text-gray-700 text-lg mb-8 leading-relaxed">
+                        Furthermore, our commitment extends beyond the kitchen. A portion of every purchase goes
+                        directly towards supporting bee conservation efforts. These vital pollinators are the
+                        cornerstone of our natural ecosystem, and together, we can help them thrive.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-gray-800">
+                            <i class="fa-solid fa-check text-secondary mr-3 text-xl"></i> Transparent Ingredient
+                            Sourcing
+                        </li>
+                        <li class="flex items-center text-gray-800">
+                            <i class="fa-solid fa-check text-secondary mr-3 text-xl"></i> 100% Allergy-Conscious
+                            Preparation
+                        </li>
+                        <li class="flex items-center text-gray-800">
+                            <i class="fa-solid fa-check text-secondary mr-3 text-xl"></i> Direct Support for Bee
+                            Sanctuaries
+                        </li>
+                    </ul>
+                </div>
+                <div class="relative reveal">
+                    <!-- Decorative background shape -->
+                    <div class="absolute -inset-4 bg-primary rounded-3xl transform rotate-3 opacity-30"></div>
+                    <img src="https://plus.unsplash.com/premium_photo-1661288486308-6d434fa1a232?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Baker kneading dough"
+                        class="relative rounded-2xl shadow-2xl w-full h-auto object-cover z-10" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         MENU SECTION
+         ========================================== -->
+    <section id="menu" class="py-24 bg-[#fafafa]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-4xl font-bold text-deepDark mb-4">Our Curated Menu</h2>
+                <div class="w-24 h-1 bg-secondary mx-auto mb-6"></div>
+                <p class="text-gray-600 text-lg">Discover our selection of meticulously crafted bread, cakes, beverages,
+                    and sweet treats. Click on any category to view our detailed custom options.</p>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                <!-- Category 1: Custom Bread -->
+                <div class="menu-card bg-white rounded-2xl overflow-hidden shadow-lg reveal cursor-pointer"
+                    onclick="openMenuModal('bread')">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop"
+                        alt="Custom Bread" class="w-full h-48 object-cover">
+                    <div class="p-6 text-center flex flex-col justify-between h-[200px]">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto -mt-12 relative z-10 border-4 border-white mb-4">
+                                <i class="fa-solid fa-bread-slice text-secondary text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-dark mb-2">Artisan Bread</h3>
+                            <p class="text-gray-600 text-sm mb-4">Gluten-free, nut-free, and custom grain options
+                                available upon consultation.</p>
+                        </div>
+                        <p class="text-secondary text-xs font-bold uppercase tracking-wider">Click to view items <i
+                                class="fa-solid fa-chevron-right ml-1"></i></p>
+                    </div>
+                </div>
+
+                <!-- Category 2: Cakes -->
+                <div class="menu-card bg-white rounded-2xl overflow-hidden shadow-lg reveal cursor-pointer"
+                    onclick="openMenuModal('cakes')" style="transition-delay: 100ms;">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop"
+                        alt="Custom Cakes" class="w-full h-48 object-cover">
+                    <div class="p-6 text-center flex flex-col justify-between h-[200px]">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto -mt-12 relative z-10 border-4 border-white mb-4">
+                                <i class="fa-solid fa-cake-candles text-secondary text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-dark mb-2">Celebration Cakes</h3>
+                            <p class="text-gray-600 text-sm mb-4">Dairy-free, egg-free, and natural sweetener
+                                alternatives tailored for you.</p>
+                        </div>
+                        <p class="text-secondary text-xs font-bold uppercase tracking-wider">Click to view items <i
+                                class="fa-solid fa-chevron-right ml-1"></i></p>
+                    </div>
+                </div>
+
+                <!-- Category 3: Beverages -->
+                <div class="menu-card bg-white rounded-2xl overflow-hidden shadow-lg reveal cursor-pointer"
+                    onclick="openMenuModal('beverages')" style="transition-delay: 200ms;">
+                    <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?q=80&w=800&auto=format&fit=crop"
+                        alt="Beverages" class="w-full h-48 object-cover">
+                    <div class="p-6 text-center flex flex-col justify-between h-[200px]">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto -mt-12 relative z-10 border-4 border-white mb-4">
+                                <i class="fa-solid fa-mug-hot text-secondary text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-dark mb-2">Warm Beverages</h3>
+                            <p class="text-gray-600 text-sm mb-4">Honey-infused teas, organic coffees, and plant-based
+                                milk selections.</p>
+                        </div>
+                        <p class="text-secondary text-xs font-bold uppercase tracking-wider">Click to view items <i
+                                class="fa-solid fa-chevron-right ml-1"></i></p>
+                    </div>
+                </div>
+
+                <!-- Category 4: Sweet Treats -->
+                <div class="menu-card bg-white rounded-2xl overflow-hidden shadow-lg reveal cursor-pointer"
+                    onclick="openMenuModal('treats')" style="transition-delay: 300ms;">
+                    <img src="https://images.unsplash.com/photo-1603532648955-039310d9ed75?q=80&w=800&auto=format&fit=crop"
+                        alt="Sweet Treats" class="w-full h-48 object-cover">
+                    <div class="p-6 text-center flex flex-col justify-between h-[200px]">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto -mt-12 relative z-10 border-4 border-white mb-4">
+                                <i class="fa-solid fa-cookie text-secondary text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-dark mb-2">Sweet Treats</h3>
+                            <p class="text-gray-600 text-sm mb-4">Honeycombs, refined-sugar-free cookies, and
+                                allergen-safe pastries.</p>
+                        </div>
+                        <p class="text-secondary text-xs font-bold uppercase tracking-wider">Click to view items <i
+                                class="fa-solid fa-chevron-right ml-1"></i></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Allergen Notice -->
+            <div class="mt-16 bg-primary/20 border border-primary rounded-xl p-6 text-center reveal">
+                <i class="fa-solid fa-circle-info text-secondary text-2xl mb-3"></i>
+                <h4 class="text-lg font-bold text-dark mb-2">Medical Allergy Disclaimer</h4>
+                <p class="text-gray-700 max-w-4xl mx-auto text-sm">
+                    Transparency is our priority. We maintain strict protocols to prevent cross-contamination. However,
+                    please consult directly with our bread specialists regarding severe medical allergies before placing
+                    a custom order. Full ingredient lists are provided with every purchase.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         GALLERY SECTION
+         ========================================== -->
+    <section id="gallery" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-4xl font-bold text-deepDark mb-4">Our History & Gallery</h2>
+                <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-gray-600 text-lg">A visual journey showcasing our dedicated team, our historic bakery
+                    roots, and the beautiful, safe creations we bake daily. Click to learn more.</p>
+            </div>
+
+            <!-- Masonry-style Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[200px]">
+
+                <!-- Item 1 (Spans 2 rows) -->
+                <div class="relative group rounded-xl overflow-hidden md:row-span-2 reveal cursor-pointer gallery-item"
+                    data-title="Our Origins" data-subtitle="History"
+                    data-desc="Founded in a small family kitchen, Bakery Bee's historic storefront still stands as a testament to our enduring commitment to quality, community, and allergy-safe baking. We have spent years perfecting recipes that everyone can enjoy without fear.">
+                    <img src="https://images.unsplash.com/photo-1542826438-bd32f43d626f?q=80&w=1000&auto=format&fit=crop"
+                        alt="Historic Bakery Storefront"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">Our Origins</span>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="relative group rounded-xl overflow-hidden reveal cursor-pointer gallery-item"
+                    style="transition-delay: 100ms;" data-title="Our Specialists" data-subtitle="Team"
+                    data-desc="Our team consists of certified artisan bakers and dietary specialists. Every recipe is meticulously crafted, tested, and refined to ensure absolute safety without ever compromising on taste, texture, or presentation.">
+                    <img src="https://images.unsplash.com/photo-1620619767323-b95a89183081?q=80&w=1000&auto=format&fit=crop"
+                        alt="Our Staff"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">Our Specialists</span>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="relative group rounded-xl overflow-hidden reveal cursor-pointer gallery-item"
+                    style="transition-delay: 200ms;" data-title="Pure Ingredients" data-subtitle="Sourcing"
+                    data-desc="We source only the finest, naturally allergy-friendly ingredients. From our locally harvested, organic honey to our specialized grain alternatives, every single component is rigorously vetted to prevent cross-contamination.">
+                    <img src="https://images.unsplash.com/photo-1587241321921-91a834d6d191?q=80&w=1000&auto=format&fit=crop"
+                        alt="Honey pouring"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">Pure Ingredients</span>
+                    </div>
+                </div>
+
+                <!-- Item 4 (Spans 2 columns) -->
+                <div class="relative group rounded-xl overflow-hidden md:col-span-2 reveal cursor-pointer gallery-item"
+                    style="transition-delay: 300ms;" data-title="Custom Creations" data-subtitle="Craftsmanship"
+                    data-desc="No two dietary needs are exactly alike. That's why we specialize in fully customized creations. We work directly with you to design stunning, safe pastries for your most important celebrations and everyday cravings.">
+                    <img src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?q=80&w=1000&auto=format&fit=crop"
+                        alt="Custom pastry layout"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">Custom Creations</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         REVIEW SECTION
+         ========================================== -->
+    <section id="review" class="py-24 bg-[#F6E000]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-4xl font-bold text-deepDark mb-4">Client Testimonials</h2>
+                <div class="w-24 h-1 bg-dark mx-auto mb-6"></div>
+                <p class="text-dark font-medium text-lg">Hear from our clients who have experienced the peace of mind
+                    that comes with our carefully crafted, allergy-friendly baking.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl relative reveal">
+                    <i class="fa-solid fa-quote-left text-4xl text-accent absolute top-6 left-6 opacity-50"></i>
+                    <div class="relative z-10 pt-6">
+                        <p class="text-gray-700 italic mb-6">"Finding a bakery that truly understands celiac disease has
+                            been a struggle. Bakery Bee not only assured me of their strict protocols, but their custom
+                            artisan bread is the best I've ever tasted."</p>
+                        <div class="flex items-center">
+                            <div
+                                class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-xl font-bold text-white mr-4 bg-secondary">
+                                M</div>
+                            <div>
+                                <h4 class="font-bold text-dark">Marcus T.</h4>
+                                <div class="text-primary text-sm">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl relative reveal" style="transition-delay: 150ms;">
+                    <i class="fa-solid fa-quote-left text-4xl text-accent absolute top-6 left-6 opacity-50"></i>
+                    <div class="relative z-10 pt-6">
+                        <p class="text-gray-700 italic mb-6">"I ordered a dairy-free and nut-free birthday cake for my
+                            daughter. The presentation was formal and beautiful, and the taste was incredible. Knowing
+                            exactly what was inside brought us great comfort."</p>
+                        <div class="flex items-center">
+                            <div
+                                class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-xl font-bold text-white mr-4 bg-secondary">
+                                E</div>
+                            <div>
+                                <h4 class="font-bold text-dark">Eleanor R.</h4>
+                                <div class="text-primary text-sm">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl relative reveal" style="transition-delay: 300ms;">
+                    <i class="fa-solid fa-quote-left text-4xl text-accent absolute top-6 left-6 opacity-50"></i>
+                    <div class="relative z-10 pt-6">
+                        <p class="text-gray-700 italic mb-6">"Aside from the phenomenal sweet treats, I deeply admire
+                            their mission to support the bees. It is a noble cause paired with exceptional culinary
+                            talent. Highly recommended."</p>
+                        <div class="flex items-center">
+                            <div
+                                class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-xl font-bold text-white mr-4 bg-secondary">
+                                J</div>
+                            <div>
+                                <h4 class="font-bold text-dark">James W.</h4>
+                                <div class="text-primary text-sm">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         CONTACT SECTION
+         ========================================== -->
+    <section id="contact" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <!-- Contact Information -->
+                <div class="reveal">
+                    <h2 class="text-4xl font-bold text-deepDark mb-6">Consult With a Specialist</h2>
+                    <p class="text-gray-600 mb-8 text-lg">
+                        Ready to place a custom order? Have questions regarding specific ingredients or allergy
+                        protocols? Reach out to us, and our dedicated team will assist you formally and promptly.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa-solid fa-location-dot text-secondary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark text-lg">Location</h4>
+                                <p class="text-gray-600">123 Honeycomb Ave, Suite 400<br>Metropolis, NY 10001</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa-solid fa-phone text-secondary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark text-lg">Phone</h4>
+                                <p class="text-gray-600">+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fa-solid fa-envelope text-secondary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-dark text-lg">Email</h4>
+                                <p class="text-gray-600">consultations@bakerybee.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="bg-[#fafafa] p-8 rounded-2xl shadow-md border border-gray-100 reveal">
+                    <form
+                        onsubmit="event.preventDefault(); alert('Thank you for your message! Our specialists will contact you shortly.');">
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input type="text" id="name" required
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email
+                                Address</label>
+                            <input type="email" id="email" required
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors">
+                        </div>
+                        <div class="mb-4">
+                            <label for="allergy" class="block text-sm font-medium text-gray-700 mb-1">Dietary
+                                Requirement / Allergy Focus</label>
+                            <input type="text" id="allergy" placeholder="e.g. Gluten-free, Nut allergy"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors">
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Inquiry
+                                Details</label>
+                            <textarea id="message" rows="4" required
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="btn-hover w-full bg-dark text-primary font-bold py-3 px-6 rounded-lg text-lg">Send
+                            Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         DONATION SECTION (Help the Bees)
+         ========================================== -->
+    <section id="donation" class="py-24 relative overflow-hidden bg-secondary">
+        <!-- Background Overlay Pattern -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="hexagons" width="50" height="43.4" patternUnits="userSpaceOnUse"
+                        patternTransform="scale(2)">
+                        <polygon points="24.8,22 37.3,29.2 37.3,43.7 24.8,50.9 12.3,43.7 12.3,29.2" fill="none"
+                            stroke="#000000" stroke-width="1"></polygon>
+                        <polygon points="49.8,7.5 62.3,14.7 62.3,29.2 49.8,36.4 37.3,29.2 37.3,14.7" fill="none"
+                            stroke="#000000" stroke-width="1"></polygon>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#hexagons)"></rect>
+            </svg>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center reveal">
+            <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <i class="fa-solid fa-bug text-dark text-4xl"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">Support Our Pollinators</h2>
+            <p class="text-white text-lg md:text-xl font-medium mb-10 max-w-2xl mx-auto">
+                Without bees, our bakery—and our global food supply—would not exist. We dedicate a percentage of our
+                profits to apiary conservation. You can also make a direct impact by donating to our partner
+                sanctuaries.
+            </p>
+            <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-lg mx-auto">
+                <h3 class="text-2xl font-bold text-dark mb-4">Make a Contribution</h3>
+                <div class="flex justify-center space-x-4 mb-6">
+                    <button
+                        class="donation-btn flex-1 py-2 border-2 border-primary rounded-lg font-bold text-dark hover:bg-primary transition-colors">$10</button>
+                    <button
+                        class="donation-btn flex-1 py-2 border-2 border-primary rounded-lg font-bold text-dark bg-primary transition-colors">$25</button>
+                    <button
+                        class="donation-btn flex-1 py-2 border-2 border-primary rounded-lg font-bold text-dark hover:bg-primary transition-colors">$50</button>
+                </div>
+                <button onclick="alert('Thank you for your generosity! This would connect to a payment gateway.')"
+                    class="btn-hover w-full bg-dark text-primary font-bold py-3 px-6 rounded-lg text-lg">Donate
+                    Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="bg-deepDark text-white py-12 border-t-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center mb-4">
+                    <i class="fa-solid fa-wheat-awn text-2xl text-primary mr-2"></i>
+                    <span class="font-bold text-2xl tracking-tight text-white">Bakery Bee</span>
+                </div>
+                <p class="text-gray-400 max-w-sm mb-6">
+                    Dedicated to providing safe, delicious, and custom-tailored baked goods for every medical dietary
+                    need, while championing the preservation of nature's vital pollinators.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-primary hover:bg-primary hover:text-dark transition-colors"><i
+                            class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/?locale=id_ID" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-primary hover:bg-primary hover:text-dark transition-colors"><i
+                            class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://x.com/?lang=id" target="_blank" rel="noopener noreferrer"
+                        class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-primary hover:bg-primary hover:text-dark transition-colors"><i
+                            class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-primary font-bold text-lg mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#home" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                    <li><a href="#about" class="text-gray-400 hover:text-primary transition-colors">About Us</a></li>
+                    <li><a href="#menu" class="text-gray-400 hover:text-primary transition-colors">Menu &
+                            Ingredients</a></li>
+                    <li><a href="#gallery" class="text-gray-400 hover:text-primary transition-colors">Gallery</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-primary font-bold text-lg mb-4">Legal & Support</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Allergy Disclaimer</a>
+                    </li>
+                    <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a></li>
+                    <li><a href="#contact" class="text-gray-400 hover:text-primary transition-colors">Contact
+                            Support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+            &copy; 2026 Bakery Bee. All rights reserved. Designed for Jennifer.
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         MENU MODAL (NEW)
+         ========================================== -->
+    <div id="menu-modal"
+        class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black bg-opacity-80 backdrop-blur-sm cursor-pointer" onclick="closeMenuModal()">
+        </div>
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col transform scale-95 transition-transform duration-300"
+            id="menu-modal-panel">
+            <button onclick="closeMenuModal()"
+                class="absolute top-4 right-4 z-20 w-10 h-10 bg-white hover:bg-gray-100 text-dark rounded-full flex items-center justify-center transition-colors shadow-md border border-gray-200">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div
+                class="p-6 sm:p-8 border-b border-gray-100 flex items-center bg-primary/10 rounded-t-2xl flex-shrink-0">
+                <i id="menu-modal-icon" class="fa-solid fa-bread-slice text-secondary text-3xl mr-4"></i>
+                <h3 id="menu-modal-title" class="text-2xl sm:text-3xl font-bold text-deepDark">Category</h3>
+            </div>
+            <div class="p-6 sm:p-8 overflow-y-auto" id="menu-modal-list">
+                <!-- Dynamic Items Inserted via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         GALLERY MODAL
+         ========================================== -->
+    <div id="gallery-modal"
+        class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black bg-opacity-80 backdrop-blur-sm cursor-pointer" id="modal-backdrop"></div>
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col md:flex-row"
+            id="modal-panel">
+            <button id="close-modal"
+                class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 hover:bg-black text-white rounded-full flex items-center justify-center transition-colors shadow-md">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="w-full md:w-1/2 h-64 md:h-auto relative">
+                <img id="modal-image" src="" alt="Gallery Image" class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-[#fafafa]">
+                <div class="inline-block px-4 py-1.5 bg-accent rounded-full text-dark font-semibold text-xs mb-4 tracking-wider uppercase w-max"
+                    id="modal-subtitle">History</div>
+                <h3 id="modal-title" class="text-3xl font-bold text-deepDark mb-4">Title</h3>
+                <div class="w-16 h-1 bg-secondary mb-6"></div>
+                <p id="modal-description" class="text-gray-700 leading-relaxed text-lg">Description goes here...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT LOGIC
+         ========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+
+            // Close mobile menu when a link is clicked
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                });
+            });
+
+            // 2. Sticky Navbar Styling on Scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-md');
+                    navbar.style.backgroundColor = 'rgba(246, 224, 0, 0.95)'; // slightly transparent primary color
+                    navbar.style.backdropFilter = 'blur(10px)';
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.style.backgroundColor = '#F6E000'; // solid primary color
+                    navbar.style.backdropFilter = 'none';
+                }
+            });
+
+            // 3. Scroll Reveal Animations using Intersection Observer
+            const revealElements = document.querySelectorAll('.reveal');
+
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+
+            // 4. Gallery Modal Logic
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const galleryModal = document.getElementById('gallery-modal');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalPanel = document.getElementById('modal-panel');
+            const modalImage = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDesc = document.getElementById('modal-description');
+            const modalSubtitle = document.getElementById('modal-subtitle');
+
+            function openGalleryModal(imgSrc, title, desc, subtitle) {
+                modalImage.src = imgSrc;
+                modalTitle.textContent = title;
+                modalDesc.textContent = desc;
+                modalSubtitle.textContent = subtitle;
+
+                galleryModal.classList.remove('hidden');
+                void galleryModal.offsetWidth;
+                galleryModal.classList.remove('opacity-0');
+                modalPanel.classList.remove('scale-95');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeGalleryModal() {
+                galleryModal.classList.add('opacity-0');
+                modalPanel.classList.add('scale-95');
+
+                setTimeout(() => {
+                    galleryModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+
+            galleryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const img = item.querySelector('img').src;
+                    const title = item.getAttribute('data-title');
+                    const desc = item.getAttribute('data-desc');
+                    const subtitle = item.getAttribute('data-subtitle');
+                    openGalleryModal(img, title, desc, subtitle);
+                });
+            });
+
+            closeModalBtn.addEventListener('click', closeGalleryModal);
+            modalBackdrop.addEventListener('click', closeGalleryModal);
+
+            // 5. Menu Modal Logic
+            const menuData = {
+                bread: {
+                    title: "Artisan Breads",
+                    icon: "fa-bread-slice",
+                    items: [
+                        { name: "Classic Sourdough", desc: "Slow-fermented, naturally gluten-free option available.", price: "$8.00" },
+                        { name: "Honey Oat Loaf", desc: "Infused with our signature organic honey and safe rolled oats.", price: "$9.50" },
+                        { name: "Focaccia with Rosemary", desc: "Dairy-free, olive oil base loaded with fresh herbs.", price: "$7.00" },
+                        { name: "Seeded Whole Grain", desc: "Nut-free recipe, packed with sunflower and pumpkin seeds.", price: "$8.50" },
+                        { name: "Rustic Baguette", desc: "Traditional crusty exterior, soft airy interior, allergy-safe.", price: "$6.00" }
+                    ]
+                },
+                cakes: {
+                    title: "Celebration Cakes",
+                    icon: "fa-cake-candles",
+                    items: [
+                        { name: "Honey Lemon Drizzle", desc: "Egg-free and dairy-free light sponge cake with zesty icing.", price: "$45.00" },
+                        { name: "Rich Chocolate Fudge", desc: "Vegan chocolate cake tailored for severe dairy allergies.", price: "$55.00" },
+                        { name: "Vanilla Bean Tiered", desc: "Classic vanilla, soy-free and custom natural sweetener options.", price: "$60.00" },
+                        { name: "Carrot & Spice", desc: "Refined sugar-free, loaded with organic spices and raisins.", price: "$50.00" },
+                        { name: "Berry Forest Cake", desc: "Layered with fresh, local berries and a whipped coconut cream.", price: "$55.00" }
+                    ]
+                },
+                beverages: {
+                    title: "Warm Beverages",
+                    icon: "fa-mug-hot",
+                    items: [
+                        { name: "Signature Honey Tea", desc: "Organic chamomile sweetened with local apiary honey.", price: "$4.50" },
+                        { name: "Golden Milk Latte", desc: "Turmeric and plant-based milk blend, naturally anti-inflammatory.", price: "$5.50" },
+                        { name: "Classic Espresso", desc: "Fair-trade organic coffee beans, robust and rich.", price: "$3.50" },
+                        { name: "Mocha Almond-Free", desc: "Safe chocolate blend with creamy oat milk.", price: "$6.00" },
+                        { name: "Spiced Hot Cider", desc: "Warm apple cider infused with cinnamon sticks and whole cloves.", price: "$5.00" }
+                    ]
+                },
+                treats: {
+                    title: "Sweet Treats",
+                    icon: "fa-cookie",
+                    items: [
+                        { name: "Pure Honeycomb", desc: "A fresh block of unrefined, natural honeycomb direct from the hive.", price: "$7.00" },
+                        { name: "Chewy Ginger Cookies", desc: "Gluten-free, refined sugar-free, packed with warm spices.", price: "$3.50" },
+                        { name: "Dark Chocolate Truffles", desc: "Dairy-free ganache rolled in pure, safe cocoa powder.", price: "$12.00 / box" },
+                        { name: "Fruit Tarts", desc: "Seasonal local fruits on an almond-free, allergy-safe pastry crust.", price: "$6.50" },
+                        { name: "Honey Glazed Pastry", desc: "Flaky, butter-free pastry layered with sweet honey glaze.", price: "$4.00" }
+                    ]
+                }
+            };
+
+            const menuModal = document.getElementById('menu-modal');
+            const menuModalTitle = document.getElementById('menu-modal-title');
+            const menuModalIcon = document.getElementById('menu-modal-icon');
+            const menuModalList = document.getElementById('menu-modal-list');
+
+            window.openMenuModal = function (category) {
+                const data = menuData[category];
+                menuModalTitle.textContent = data.title;
+                menuModalIcon.className = `fa-solid ${data.icon} text-secondary text-3xl mr-4`;
+
+                // Clear list
+                menuModalList.innerHTML = '';
+
+                // Populate list
+                data.items.forEach(item => {
+                    const li = document.createElement('div');
+                    li.className = 'flex flex-col sm:flex-row sm:justify-between sm:items-start border-b border-gray-200 pb-5 mb-5 last:border-0 last:pb-0 last:mb-0';
+                    li.innerHTML = `
+                        <div class="pr-0 sm:pr-4 mb-2 sm:mb-0">
+                            <h4 class="text-lg font-bold text-dark">${item.name}</h4>
+                            <p class="text-gray-600 text-sm mt-1 leading-relaxed">${item.desc}</p>
+                        </div>
+                        <div class="text-secondary font-bold whitespace-nowrap text-lg">${item.price}</div>
+                    `;
+                    menuModalList.appendChild(li);
+                });
+
+                menuModal.classList.remove('hidden');
+                void menuModal.offsetWidth;
+                menuModal.classList.remove('opacity-0');
+                menuModal.querySelector('#menu-modal-panel').classList.remove('scale-95');
+                document.body.style.overflow = 'hidden';
+            }
+
+            window.closeMenuModal = function () {
+                menuModal.classList.add('opacity-0');
+                menuModal.querySelector('#menu-modal-panel').classList.add('scale-95');
+                setTimeout(() => {
+                    menuModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+
+            // 6. Donation Buttons Logic
+            const donationBtns = document.querySelectorAll('.donation-btn');
+            donationBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset all buttons to the unselected state
+                    donationBtns.forEach(b => {
+                        b.classList.remove('bg-primary');
+                        b.classList.add('hover:bg-primary');
+                    });
+                    // Highlight the clicked button
+                    btn.classList.add('bg-primary');
+                    btn.classList.remove('hover:bg-primary');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
