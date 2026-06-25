@@ -1,0 +1,64 @@
+/* Base Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fafafa;
+    color: #0B0A0A;
+    overflow-x: hidden;
+    transition: font-size 0.2s ease, filter 0.3s ease;
+}
+
+/* Honey Drip SVG positioning */
+.honey-drip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    z-index: 10;
+}
+
+.honey-drip svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 150px;
+}
+
+@media (min-width: 768px) {
+    .honey-drip svg {
+        height: 250px;
+    }
+}
+
+/* Scroll Animations (triggered by Intersection Observer in JS) */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom Button Hover Effect */
+.btn-hover {
+    transition: all 0.3s ease;
+}
+
+.btn-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Card Hover Effect */
+.menu-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
